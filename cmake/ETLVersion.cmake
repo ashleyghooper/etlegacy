@@ -106,11 +106,15 @@ execute_process(COMMAND git describe --abbrev=0
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		OUTPUT_VARIABLE GIT_DESCRIBE_TAG)
 
+message(STATUS "WORKING_DIRECTORY: '${WORKING_DIRECTORY}'")
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR: '${CMAKE_CURRENT_SOURCE_DIR}'")
+
 if(GIT_DESCRIBE)
 	set(ETL_CMAKE_VERSION ${GIT_DESCRIBE})
 	set(ETL_CMAKE_VERSION_SHORT ${GIT_DESCRIBE_TAG})
 
 	string(COMPARE EQUAL "${ETL_CMAKE_VERSION}" "${ETL_CMAKE_VERSION_SHORT}" VERSION_IS_CLEAN)
+        message(STATUS "VERSION_IS_CLEAN: '${VERSION_IS_CLEAN}'")
 
 	if(NOT VERSION_IS_CLEAN)
 		message(STATUS "Using a non release version build: '${ETL_CMAKE_VERSION}' != '${ETL_CMAKE_VERSION_SHORT}'")
@@ -119,6 +123,7 @@ if(GIT_DESCRIBE)
 			message(STATUS "Detected build running in CI, using full version string instead")
 			set(ETL_CMAKE_VERSION_SHORT "${ETL_CMAKE_VERSION}")
 		else()
+                        message(STATUS "Not running in CI? ////////////////////")
 			set(ETL_CMAKE_VERSION_SHORT "${GIT_DESCRIBE_TAG}_dirty")
 		endif()
 	endif()
